@@ -1,0 +1,114 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateTaskInput {
+  assignedTo: String!
+  description: String!
+  parentTask: String
+  priority: PRIORITIES!
+  reporter: String!
+  status: STATUS!
+  subject: String!
+  team: String
+}
+
+input CreateTeamInput {
+  name: String!
+}
+
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  password_confirmation: String!
+}
+
+input GetTaskInput {
+  id: String!
+}
+
+input GetTasksByTeamInput {
+  team: String!
+}
+
+input GetTeamInput {
+  team: String!
+}
+
+input JoinTeamInput {
+  team: String!
+}
+
+type JoinedTeams {
+  _id: String!
+  member: User!
+  team: Team!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createTask(createTaskInput: CreateTaskInput!): Task!
+  createTeam(createTeamInput: CreateTeamInput!): Boolean!
+  joinTeam(joinTeamInput: JoinTeamInput!): Boolean!
+  login(loginInput: LoginUserInput!): Boolean!
+  logout: Boolean!
+  register(registerInput: CreateUserInput!): Boolean!
+}
+
+enum PRIORITIES {
+  HIGH
+  LOW
+  MEDIUM
+}
+
+type Query {
+  getJoinedTeams: [JoinedTeams!]
+  getMyCreatedTeams: [Team!]!
+  getTask(getTaskInput: GetTaskInput!): Task
+  getTasksByTeam(team: GetTasksByTeamInput!): [Task!]!
+  getTeam(getTeam: GetTeamInput!): Team
+  me: User!
+}
+
+enum STATUS {
+  BACKLOG
+  CODE_REVIEW
+  DONE
+  IN_PROGRESS
+  QA
+  TODO
+}
+
+type Task {
+  _id: String!
+  assignedTo: User!
+  attachments: [String!]!
+  createdBy: User!
+  description: String
+  parentTask: Task
+  priority: String!
+  reporter: User!
+  status: String!
+  subject: String!
+  team: Team!
+}
+
+type Team {
+  _id: String!
+  createdBy: User!
+  name: String!
+}
+
+type User {
+  _id: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  role: String!
+}
