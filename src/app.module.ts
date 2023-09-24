@@ -6,25 +6,20 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { SessionRequest } from 'supertokens-node/lib/build/framework/express';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import { ApolloDriver } from '@nestjs/apollo';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import authConfig from './auth/config/auth.config';
 import { EntityExistsConstrains } from './common/validators/is-unique.validator';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TeamModule } from './team/team.module';
-import * as mongooseAutoPopulate from 'mongoose-autopopulate';
+import { AuthModule } from './auth/auth.module';
+import authConfig from './auth/config/auth.config';
+import { UserModule } from './user/user.module';
+
 @Module({
   imports: [
     CqrsModule,
     ConfigModule.forRoot(),
-    MongooseModule.forRoot('mongodb://localhost:27018/task-management', {
-      connectionFactory: (connection) => {
-        connection.plugin(mongooseAutoPopulate);
-        return connection;
-      },
-    }),
+    MongooseModule.forRoot('mongodb://localhost:27018/task-management'),
     AuthModule.forRootAsync({
       inject: [authConfig.KEY],
       imports: [ConfigModule.forFeature(authConfig)],
@@ -60,8 +55,8 @@ import * as mongooseAutoPopulate from 'mongoose-autopopulate';
       },
     }),
     TaskModule,
-    UserModule,
     TeamModule,
+    UserModule,
   ],
   controllers: [],
   providers: [

@@ -10,7 +10,7 @@ input CreateTaskInput {
   reporter: String!
   status: STATUS!
   subject: String!
-  team: String
+  team: String!
 }
 
 input CreateTeamInput {
@@ -41,7 +41,7 @@ input JoinTeamInput {
   team: String!
 }
 
-type JoinedTeams {
+type JoinedTeam {
   _id: String!
   member: User!
   team: Team!
@@ -68,7 +68,7 @@ enum PRIORITIES {
 }
 
 type Query {
-  getJoinedTeams: [JoinedTeams!]
+  getJoinedTeams: [JoinedTeam!]
   getMyCreatedTeams: [Team!]!
   getTask(getTaskInput: GetTaskInput!): Task
   getTasksByTeam(team: GetTasksByTeamInput!): [Task!]!
@@ -96,7 +96,7 @@ type Task {
   reporter: User!
   status: String!
   subject: String!
-  team: Team!
+  team: Task!
 }
 
 type Team {

@@ -1,12 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { GetUserByEmailQuery } from '../user/query/getUserByEmail.query';
-import { User } from '../user/schema/user.schema';
+import { FindUserByQuery } from '../user/query/findUserBy.query';
+import { User, UserDocument } from '../user/schema/user.schema';
 import { LoginUserCommand } from './command/loginUser.command';
-import { GraphQLContext } from '../utils/types/graphql/context';
 import { LoginUserInput } from './input/login-user.input';
 import { CreateUserInput } from '../user/input/create-user.input';
 import { CreateNewUserCommand } from '../user/command/createNewUser.command';
+import { GraphQLContext } from '../utils/types/graphql/context';
+import { createNewSession } from 'supertokens-node/recipe/session';
 
 @Injectable()
 export class AuthService {
@@ -27,15 +28,10 @@ export class AuthService {
   }
 
   async login(ctx: GraphQLContext, { password, email }: LoginUserInput) {
-    const user = await this.queryBus.execute<GetUserByEmailQuery, User | null>(
-      new GetUserByEmailQuery(email),
+    const user = await this.commandBus.execute<LoginUserCommand, UserDocument>(
+      new LoginUserCommand(email, password),
     );
-    if (!user) {
-      throw new BadRequestException('wrong email or password');
-    }
 
-    await this.commandBus.execute<LoginUserCommand, void>(
-      new LoginUserCommand(ctx, user, password),
-    );
+    await createNewSession(ctx.req, ctx.res, 'public', user._id);
   }
 }

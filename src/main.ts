@@ -8,12 +8,15 @@ import {
 } from '@nestjs/common';
 import helmet from 'helmet';
 import { useContainer } from 'class-validator';
-import { SupertokensExceptionFilter } from './auth/filter/auth.filter';
 import supertokens from 'supertokens-node';
 import { verifySession } from 'supertokens-node/recipe/session/framework/express';
+import { SupertokensExceptionFilter } from './auth/filter/auth.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+    abortOnError: false,
+  });
   app.use(
     helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }),
   );

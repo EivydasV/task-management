@@ -6,14 +6,16 @@ import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { CqrsModule } from '@nestjs/cqrs';
 import { LoginUserHandler } from './handler/command/loginUser.handler';
-import { HashingService } from '../user/hashing/hashing.service';
-import { ArgonService } from '../user/hashing/argon.service';
+
 import { CreateNewUserHandler } from './handler/command/createNewUser.handler';
+import { UserModule } from '../user/user.module';
+import { HashingService } from './hashing/hashing.service';
+import { ArgonService } from './hashing/argon.service';
 
 export const commandHandlers = [LoginUserHandler, CreateNewUserHandler];
 
 @Module({
-  imports: [CqrsModule],
+  imports: [CqrsModule, UserModule],
   providers: [
     SupertokensService,
     AuthResolver,

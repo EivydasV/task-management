@@ -1,17 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
 import { JoinTeamCommand } from '../../command/joinTeam.command';
-import { JoinedTeams } from '../../schema/joinedTeams.schema';
+import { JoinedTeamRepository } from '../../repository/JoinedTeam.repository';
 
 @CommandHandler(JoinTeamCommand)
 export class JoinTeamHandler implements ICommandHandler<JoinTeamCommand> {
-  constructor(
-    @InjectModel(JoinedTeams.name)
-    private readonly joinedTeamsModel: Model<JoinedTeams>,
-  ) {}
+  constructor(private readonly joinedTeamRepository: JoinedTeamRepository) {}
 
   async execute({ joinTeamInput: { team, member } }: JoinTeamCommand) {
-    return this.joinedTeamsModel.create({ team, member });
+    return this.joinedTeamRepository.create({ team, member });
   }
 }

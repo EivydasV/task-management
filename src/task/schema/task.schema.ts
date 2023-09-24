@@ -1,9 +1,9 @@
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { User } from '../../user/schema/user.schema';
 import { IdentifiableEntitySchema } from '../../utils/db/IdentifiableEntity.schema';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Team } from '../../team/schema/team.schema';
+import { User } from '../../user/schema/user.schema';
 
 export type TaskDocument = HydratedDocument<Task>;
 
@@ -45,49 +45,49 @@ export class Task extends IdentifiableEntitySchema {
   @Prop({ required: true, enum: PRIORITIES })
   priority!: PRIORITIES;
 
-  @Field()
+  @Field(() => User)
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: User.name,
   })
-  assignedTo!: User;
+  assignedTo!: User | string;
 
-  @Field()
+  @Field(() => User)
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: User.name,
   })
-  createdBy!: User;
+  createdBy!: User | string;
 
-  @Field()
+  @Field(() => User)
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: User.name,
   })
-  reporter!: User;
+  reporter!: User | string;
 
-  @Field({ nullable: true })
+  @Field(() => Task, { nullable: true })
   @Prop({
     required: false,
     type: mongoose.Schema.Types.ObjectId,
     ref: Task.name,
   })
-  parentTask?: Task;
+  parentTask?: Task | string;
 
-  @Field()
+  @Field(() => Task)
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: Team.name,
   })
-  team!: Team;
+  team!: Team | string;
 
   @Field(() => [String])
   @Prop({ type: [String] })
-  attachments!: string[];
+  attachments?: string[];
 
   @Field()
   @Prop({ required: true, enum: STATUS, default: STATUS.BACKLOG })

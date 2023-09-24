@@ -8,9 +8,9 @@ import {
 } from '@nestjs/graphql';
 import { TeamService } from './services/team.service';
 import { CreateTeamInput } from './input/createTeam.input';
-import { AuthId } from '../auth/decorator/authId.decorator';
 import { Team, TeamDocument } from './schema/team.schema';
 import { GetTeamInput } from './input/getTeam.input';
+import { AuthId } from '../auth/decorator/authId.decorator';
 
 @Resolver(() => Team)
 export class TeamResolver {

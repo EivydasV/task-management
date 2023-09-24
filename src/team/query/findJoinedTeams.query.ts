@@ -1,6 +1,6 @@
 import { FilterQuery } from 'mongoose';
-import { JoinedTeams } from '../schema/joinedTeams.schema';
+import { JoinedTeam } from '../schema/joinedTeam.schema';
 
 export class FindJoinedTeamsQuery {
-  constructor(public readonly filter: FilterQuery<JoinedTeams>) {}
+  constructor(public readonly filter: FilterQuery<JoinedTeam>) {}
 }

@@ -13,13 +13,13 @@ export class Team extends IdentifiableEntitySchema {
   @Prop({ required: true, maxlength: 100 })
   name!: string;
 
-  @Field()
+  @Field(() => User)
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: User.name,
   })
-  createdBy!: User;
+  createdBy!: User | string;
 }
 
 export const TeamSchema = SchemaFactory.createForClass(Team);

@@ -8,9 +8,9 @@ import {
 import { IsEqualTo } from 'src/common/validators/is-equal-to.valdiator';
 import { IsStrongPassword } from 'src/common/validators/strong-password.valdiator';
 import { Transform, TransformFnParams } from 'class-transformer';
-import { EntityExists } from '../../common/validators/is-unique.validator';
 import { InputType } from '@nestjs/graphql';
 import { User } from '../schema/user.schema';
+import { EntityExists } from '../../common/validators/is-unique.validator';
 
 @InputType()
 export class CreateUserInput {

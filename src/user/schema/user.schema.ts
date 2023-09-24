@@ -1,10 +1,9 @@
-import mongoose, { HydratedDocument } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IdentifiableEntitySchema } from '../../utils/db/IdentifiableEntity.schema';
 
 export type UserDocument = HydratedDocument<User>;
-
 @Schema({ timestamps: true })
 @ObjectType()
 export class User extends IdentifiableEntitySchema {
@@ -27,5 +26,4 @@ export class User extends IdentifiableEntitySchema {
   @Prop({ required: true, maxlength: 100 })
   role!: string;
 }
-
 export const UserSchema = SchemaFactory.createForClass(User);

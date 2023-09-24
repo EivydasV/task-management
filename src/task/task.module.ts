@@ -6,8 +6,9 @@ import { Task, TaskSchema } from './schema/task.schema';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateTaskHandler } from './handler/command/createTask.handler';
 import { GetTaskByIdHandler } from './handler/query/GetTaskById.handler';
-import { UserModule } from '../user/user.module';
 import { GetTasksHandler } from './handler/query/GetTasks.handler';
+import { UserModule } from '../user/user.module';
+import { TaskRepository } from './repository/task.repository';
 
 export const commandHandlers = [CreateTaskHandler];
 
@@ -19,6 +20,12 @@ export const queryHandlers = [GetTaskByIdHandler, GetTasksHandler];
     MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),
     UserModule,
   ],
-  providers: [TaskService, TaskResolver, ...commandHandlers, ...queryHandlers],
+  providers: [
+    TaskService,
+    TaskResolver,
+    TaskRepository,
+    ...commandHandlers,
+    ...queryHandlers,
+  ],
 })
 export class TaskModule {}

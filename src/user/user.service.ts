@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateNewUserCommand } from '../user/command/createNewUser.command';
 import { CreateUserInput } from '../user/input/create-user.input';
-import { GetUserByIdQuery } from './query/getUserById.query';
+import { FindUserByIdQuery } from './query/findUserById.query';
 import { UserDocument } from './schema/user.schema';
 
 @Injectable()
@@ -24,8 +24,8 @@ export class UserService {
   }
 
   async getUserById(id: string) {
-    return this.queryBus.execute<GetUserByIdQuery, UserDocument | null>(
-      new GetUserByIdQuery(id),
+    return this.queryBus.execute<FindUserByIdQuery, UserDocument | null>(
+      new FindUserByIdQuery(id),
     );
   }
 }

@@ -3,7 +3,7 @@ import { TeamService } from './services/team.service';
 import { TeamResolver } from './team.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Team, TeamSchema } from './schema/team.schema';
-import { JoinedTeams, JoinedTeamsSchema } from './schema/joinedTeams.schema';
+import { JoinedTeam, JoinedTeamSchema } from './schema/joinedTeam.schema';
 import { CreateTeamHandler } from './handler/command/createTeam.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { FindTeamsHandler } from './handler/query/findTeams.handler';
@@ -13,6 +13,8 @@ import { JoinedTeamService } from './services/joinedTeam.service';
 import { JoinTeamHandler } from './handler/command/joinTeam.handler';
 import { FindTeamHandler } from './handler/query/findTeam.handler';
 import { FindTeamByIdHandler } from './handler/query/findTeamById.handler';
+import { TeamRepository } from './repository/team.repository';
+import { JoinedTeamRepository } from './repository/JoinedTeam.repository';
 
 export const commandHandlers = [CreateTeamHandler, JoinTeamHandler];
 
@@ -29,8 +31,8 @@ export const queryHandlers = [
     MongooseModule.forFeature([
       { name: Team.name, schema: TeamSchema },
       {
-        name: JoinedTeams.name,
-        schema: JoinedTeamsSchema,
+        name: JoinedTeam.name,
+        schema: JoinedTeamSchema,
       },
     ]),
   ],
@@ -39,6 +41,8 @@ export const queryHandlers = [
     TeamService,
     JoinedTeamResolver,
     JoinedTeamService,
+    TeamRepository,
+    JoinedTeamRepository,
     ...commandHandlers,
     ...queryHandlers,
   ],

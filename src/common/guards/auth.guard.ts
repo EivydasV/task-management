@@ -8,11 +8,10 @@ import { Reflector } from '@nestjs/core';
 import { Error as STError } from 'supertokens-node';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { User } from '../../user/schema/user.schema';
 import { QueryBus } from '@nestjs/cqrs';
-import { GetUserByIdQuery } from '../../user/query/getUserById.query';
 import { GraphQLContext } from '../../utils/types/graphql/context';
 import { UserService } from '../../user/user.service';
+import { User } from '../../user/schema/user.schema';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

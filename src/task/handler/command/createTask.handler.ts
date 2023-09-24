@@ -1,16 +1,13 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+
 import { CreateTaskCommand } from '../../command/createTask.command';
-import { Task } from '../../schema/task.schema';
+import { TaskRepository } from '../../repository/task.repository';
 
 @CommandHandler(CreateTaskCommand)
 export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
-  constructor(
-    @InjectModel(Task.name) private readonly taskModel: Model<Task>,
-  ) {}
+  constructor(private readonly taskRepository: TaskRepository) {}
 
   async execute({ task }: CreateTaskCommand) {
-    return this.taskModel.create(task);
+    return this.taskRepository.create(task);
   }
 }

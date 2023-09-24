@@ -5,9 +5,10 @@ import {
   QueryBus,
 } from '@nestjs/cqrs';
 import { BadRequestException } from '@nestjs/common';
-import { createNewSession } from 'supertokens-node/recipe/session';
 import { LoginUserCommand } from '../../command/loginUser.command';
-import { HashingService } from '../../../user/hashing/hashing.service';
+import { FindUserByQuery } from '../../../user/query/findUserBy.query';
+import { UserDocument } from '../../../user/schema/user.schema';
+import { HashingService } from '../../hashing/hashing.service';
 
 @CommandHandler(LoginUserCommand)
 export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
@@ -18,12 +19,19 @@ export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
   ) {}
 
   async execute(command: LoginUserCommand) {
-    const { user, ctx, password } = command;
+    const { email, password } = command;
+
+    const user = await this.queryBus.execute<FindUserByQuery, UserDocument>(
+      new FindUserByQuery({ email }),
+    );
+    if (!user) {
+      throw new BadRequestException('wrong email or password');
+    }
 
     if (!(await this.hashingService.compare(user.password, password))) {
       throw new BadRequestException('wrong email or password');
     }
 
-    await createNewSession(ctx.req, ctx.res, 'public', user._id);
+    return user;
   }
 }

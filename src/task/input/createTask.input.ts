@@ -10,6 +10,7 @@ import { Field, HideField, InputType } from '@nestjs/graphql';
 import { PRIORITIES, STATUS } from '../schema/task.schema';
 import { EntityExists } from '../../common/validators/is-unique.validator';
 import { User } from '../../user/schema/user.schema';
+import { Team } from '../../team/schema/team.schema';
 
 @InputType()
 export class CreateTaskInput {
@@ -49,7 +50,8 @@ export class CreateTaskInput {
 
   @Field()
   @IsMongoId()
-  team?: string;
+  @EntityExists(Team.name, '_id', true)
+  team!: string;
 
   @Field(() => STATUS)
   @IsNotEmpty()
