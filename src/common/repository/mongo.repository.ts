@@ -4,10 +4,12 @@ import { Injectable, Type } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { MongooseQuery } from '../../utils/types/mongoose/query';
 
-export function MongoRepository<T extends Document, K>(entityCLs: Type<K>) {
+export function MongoRepository<T extends Document, K>(
+  entityCLs: Type<K>,
+): Type<GenericRepository<T, K>> {
   @Injectable()
   class MongoRepositoryCls implements GenericRepository<T, K> {
-    protected constructor(
+    public constructor(
       @InjectModel(entityCLs.name) public entity: Model<any>,
     ) {}
 

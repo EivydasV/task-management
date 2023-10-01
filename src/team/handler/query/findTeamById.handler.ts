@@ -1,16 +1,12 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Team } from '../../schema/team.schema';
 import { FindTeamByIdQuery } from '../../query/findTeamById.query';
+import { TeamRepository } from '../../repository/team.repository';
 
 @QueryHandler(FindTeamByIdQuery)
 export class FindTeamByIdHandler implements IQueryHandler<FindTeamByIdQuery> {
-  constructor(
-    @InjectModel(Team.name) private readonly teamModel: Model<Team>,
-  ) {}
+  constructor(private readonly teamRepository: TeamRepository) {}
 
   async execute({ id }: FindTeamByIdQuery) {
-    return this.teamModel.findById(id);
+    return this.teamRepository.findById(id);
   }
 }

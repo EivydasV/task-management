@@ -1,16 +1,12 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { GetTaskByIdQuery } from '../../query/getTaskById.query';
-import { Task } from '../../schema/task.schema';
+import { TaskRepository } from '../../repository/task.repository';
 
 @QueryHandler(GetTaskByIdQuery)
 export class GetTaskByIdHandler implements IQueryHandler<GetTaskByIdQuery> {
-  constructor(
-    @InjectModel(Task.name) private readonly taskModel: Model<Task>,
-  ) {}
+  constructor(private readonly taskRepository: TaskRepository) {}
 
   async execute({ id }: GetTaskByIdQuery) {
-    return this.taskModel.findById(id);
+    return this.taskRepository.findById(id);
   }
 }
