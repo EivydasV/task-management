@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TaskModule } from './task/task.module';
 import { join } from 'node:path';
@@ -14,12 +14,16 @@ import { TeamModule } from './team/team.module';
 import { AuthModule } from './auth/auth.module';
 import authConfig from './auth/config/auth.config';
 import { UserModule } from './user/user.module';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
+import { AppLoggingMiddleware } from './common/middlewares/app-logging.middleware';
+import { CommonModule } from './common/common.module';
+import { CryptoModule } from './crypto/crypto.module';
 
 @Module({
   imports: [
     CqrsModule,
     ConfigModule.forRoot(),
-    MongooseModule.forRoot('mongodb://localhost:27018/task-management'),
+    MongooseModule.forRoot('mongodb://db:27017/task-management'),
     AuthModule.forRootAsync({
       inject: [authConfig.KEY],
       imports: [ConfigModule.forFeature(authConfig)],
@@ -57,6 +61,8 @@ import { UserModule } from './user/user.module';
     TaskModule,
     TeamModule,
     UserModule,
+    CommonModule,
+    CryptoModule,
   ],
   controllers: [],
   providers: [
@@ -64,4 +70,8 @@ import { UserModule } from './user/user.module';
     { provide: APP_GUARD, useClass: AuthGuard },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(AppLoggingMiddleware).forRoutes('*');
+  }
+}

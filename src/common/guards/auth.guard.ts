@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { Error as STError } from 'supertokens-node';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { QueryBus } from '@nestjs/cqrs';
+
 import { GraphQLContext } from '../../utils/types/graphql/context';
 import { UserService } from '../../user/user.service';
 import { User } from '../../user/schema/user.schema';
@@ -17,7 +17,6 @@ import { User } from '../../user/schema/user.schema';
 export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private readonly queryBus: QueryBus,
     private readonly userService: UserService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -30,6 +29,7 @@ export class AuthGuard implements CanActivate {
     const req = ctx.req;
     const resp = ctx.res;
     const session = ctx?.session;
+
     if (isPublic) {
       const authId = session?.getUserId();
       let user: User | null = null;

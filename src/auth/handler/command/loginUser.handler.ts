@@ -1,20 +1,14 @@
-import {
-  CommandHandler,
-  EventBus,
-  ICommandHandler,
-  QueryBus,
-} from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler, QueryBus } from '@nestjs/cqrs';
 import { BadRequestException } from '@nestjs/common';
 import { LoginUserCommand } from '../../command/loginUser.command';
 import { FindUserByQuery } from '../../../user/query/findUserBy.query';
 import { UserDocument } from '../../../user/schema/user.schema';
-import { HashingService } from '../../hashing/hashing.service';
+import { HashingService } from '../../../crypto/services/hashing.service';
 
 @CommandHandler(LoginUserCommand)
 export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {
   constructor(
     private readonly queryBus: QueryBus,
-    private readonly eventBus: EventBus,
     private readonly hashingService: HashingService,
   ) {}
 

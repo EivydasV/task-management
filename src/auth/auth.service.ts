@@ -1,20 +1,17 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { FindUserByQuery } from '../user/query/findUserBy.query';
-import { User, UserDocument } from '../user/schema/user.schema';
+import { Injectable } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
+import { UserDocument } from '../user/schema/user.schema';
 import { LoginUserCommand } from './command/loginUser.command';
 import { LoginUserInput } from './input/login-user.input';
 import { CreateUserInput } from '../user/input/create-user.input';
 import { CreateNewUserCommand } from '../user/command/createNewUser.command';
 import { GraphQLContext } from '../utils/types/graphql/context';
 import { createNewSession } from 'supertokens-node/recipe/session';
+import supertokens from 'supertokens-node';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly queryBus: QueryBus,
-    private readonly commandBus: CommandBus,
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   async createNewUser({
     password,
@@ -32,6 +29,11 @@ export class AuthService {
       new LoginUserCommand(email, password),
     );
 
-    await createNewSession(ctx.req, ctx.res, 'public', user._id);
+    await createNewSession(
+      ctx.req,
+      ctx.res,
+      'public',
+      supertokens.convertToRecipeUserId(user._id),
+    );
   }
 }

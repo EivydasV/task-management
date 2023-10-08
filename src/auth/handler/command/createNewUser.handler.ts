@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateNewUserCommand } from '../../../user/command/createNewUser.command';
 import { UserRepository } from '../../../user/repository/user.repository';
-import { HashingService } from '../../hashing/hashing.service';
+import { HashingService } from '../../../crypto/services/hashing.service';
 @CommandHandler(CreateNewUserCommand)
 export class CreateNewUserHandler
   implements ICommandHandler<CreateNewUserCommand>

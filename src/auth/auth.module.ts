@@ -9,22 +9,17 @@ import { LoginUserHandler } from './handler/command/loginUser.handler';
 
 import { CreateNewUserHandler } from './handler/command/createNewUser.handler';
 import { UserModule } from '../user/user.module';
-import { HashingService } from './hashing/hashing.service';
-import { ArgonService } from './hashing/argon.service';
+import { CryptoModule } from '../crypto/crypto.module';
 
 export const commandHandlers = [LoginUserHandler, CreateNewUserHandler];
 
 @Module({
-  imports: [CqrsModule, UserModule],
+  imports: [CqrsModule, UserModule, CryptoModule],
   providers: [
     SupertokensService,
     AuthResolver,
     AuthService,
     ...commandHandlers,
-    {
-      provide: HashingService,
-      useClass: ArgonService,
-    },
   ],
   controllers: [],
   exports: [],
